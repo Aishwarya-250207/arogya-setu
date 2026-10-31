@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="en"><head><meta charset="utf-8"><title>Arogya-Setu</title>
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>
+:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px);--bg:#f5f8f8;--card:#fff;--bd:#d9e3e3;--tx:#16282b;--mu:#5a6e71;--pr:#0d7f7a;--prt:#fff;--sf:#e3f1f4;--wr:#fff4d6;--wrt:#7a5200;--er:#b42318;--ok:#177245}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0f1b1d;--card:#172628;--bd:#2a3e41;--tx:#e6f0f0;--mu:#9bb0b3;--pr:#3cc4bd;--prt:#052523;--sf:#1d3338;--wr:#3a3014;--wrt:#f3d27a;--er:#ff8a80;--ok:#6fd6a0}}
+:root[data-theme="dark"]{--bg:#0f1b1d;--card:#172628;--bd:#2a3e41;--tx:#e6f0f0;--mu:#9bb0b3;--pr:#3cc4bd;--prt:#052523;--sf:#1d3338;--wr:#3a3014;--wrt:#f3d27a;--er:#ff8a80;--ok:#6fd6a0}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}body{margin:0;background:var(--bg);color:var(--tx);font:16px/1.5 "Segoe UI",Roboto,system-ui,sans-serif}
+h1,h2,h3{margin:0 0 .5rem;font-family:Georgia,"Times New Roman",serif}h1{font-size:1.7rem}h2{font-size:1.25rem}h3{font-size:1.05rem}
+.app{display:flex;min-height:100vh}.side{width:220px;background:var(--card);border-right:1px solid var(--bd);padding:1rem;flex:none;display:flex;flex-direction:column;gap:.3rem}
+.main{flex:1;min-width:0;padding:1.2rem 1.5rem}.top{display:flex;justify-content:space-between;align-items:center;gap:.5rem;margin-bottom:1rem;flex-wrap:wrap}
+.logo{font:700 1.3rem Georgia,serif;color:var(--pr);margin-bottom:.8rem}
+.nav{background:none;border:0;color:var(--tx);text-align:left;padding:.65rem .8rem;border-radius:8px;font:inherit;cursor:pointer}.nav.on{background:var(--sf);font-weight:600;color:var(--pr)}
+.card{background:var(--card);border:1px solid var(--bd);border-radius:12px;padding:1rem;margin-bottom:1rem;box-shadow:0 1px 2px rgba(0,0,0,.05)}
+.grid{display:grid;gap:1rem;grid-template-columns:repeat(auto-fit,minmax(200px,1fr))}.row{display:flex;gap:.5rem;flex-wrap:wrap;align-items:center}.sp{justify-content:space-between}
+.stat{font:700 2rem Georgia,serif;color:var(--pr)}.mu{color:var(--mu);font-size:.9rem}
+button.b,a.b{background:var(--pr);color:var(--prt);border:0;border-radius:8px;padding:.6rem 1rem;font:600 .95rem inherit;cursor:pointer;text-decoration:none;display:inline-block}
+button.b.s,a.b.s{background:var(--sf);color:var(--tx);border:1px solid var(--bd)}button.b.d{background:var(--er);color:#fff}button.b.sm,a.b.sm{padding:.35rem .7rem;font-size:.85rem}
+input,select,textarea{width:100%;padding:.6rem;border:1px solid var(--bd);border-radius:8px;background:var(--bg);color:var(--tx);font:inherit}
+label{display:block;font-size:.85rem;color:var(--mu);margin:.6rem 0 .2rem}:focus-visible{outline:2px solid var(--pr);outline-offset:2px}
+.err{color:var(--er);font-size:.85rem}.tag{display:inline-block;padding:.1rem .5rem;border-radius:99px;background:var(--sf);font-size:.8rem}.tag.w{background:var(--wr);color:var(--wrt)}.tag.v{color:var(--ok)}
+.warn{background:var(--wr);color:var(--wrt);padding:.6rem .8rem;border-radius:8px;font-size:.9rem;margin:.5rem 0}
+table{width:100%;border-collapse:collapse}td,th{padding:.4rem;border-bottom:1px solid var(--bd);text-align:left;vertical-align:top}.ov{overflow-x:auto}
+.drop{border:2px dashed var(--bd);border-radius:12px;padding:1.5rem;text-align:center;cursor:pointer}.drop.h{border-color:var(--pr);background:var(--sf)}
+.tl{border-left:2px solid var(--pr);margin-left:.4rem;padding-left:1rem}.tl div{margin-bottom:.7rem}
+.modal{position:fixed;inset:0;background:rgba(0,0,0,.55);display:flex;align-items:flex-start;justify-content:center;padding:1rem;overflow:auto;z-index:50}.modal>div{background:var(--card);border-radius:12px;padding:1.2rem;width:100%;max-width:720px;margin-top:2rem}
+.toast{position:fixed;bottom:1rem;left:50%;transform:translateX(-50%);background:var(--tx);color:var(--bg);padding:.6rem 1rem;border-radius:8px;z-index:99}
+.login{max-width:400px;margin:4vh auto;padding:1rem}.f2{display:grid;grid-template-columns:1fr 1fr;gap:0 .8rem}.sum h3{margin-top:1rem}
+@media(max-width:760px){.app{flex-direction:column}.side{width:100%;flex-direction:row;overflow-x:auto;border-right:0;border-bottom:1px solid var(--bd);align-items:center}.logo{margin:0 .5rem 0 0}.nav{white-space:nowrap}.main{padding:1rem}.f2{grid-template-columns:1fr}}
+</style></head><body><div id="root"></div>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/tesseract.js/5.0.5/tesseract.min.js"></script>
+<script>
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const uid=p=>p+Math.random().toString(36).slice(2,8);const today=()=>new Date().toISOString().slice(0,10);
+// ---- Data (in memory only: no patient data is written to browser storage) ----
+let P=[
+{id:'AS-1001',name:'Sunita Devi',age:54,gender:'Female',phone:'9000000001',blood:'B+',allergies:'Penicillin',conds:'Type 2 Diabetes',reg:'2026-05-12',upd:'2026-09-20'},
+{id:'AS-1002',name:'Ramesh Kumar',age:61,gender:'Male',phone:'9000000002',blood:'O+',allergies:'',conds:'Hypertension',reg:'2026-06-03',upd:'2026-10-02'},
+{id:'AS-1003',name:'Meena Kumari',age:38,gender:'Female',phone:'',blood:'A+',allergies:'None reported',conds:'Anaemia',reg:'2026-07-18',upd:'2026-10-15'}];
+let D=[
+{id:'d1',pid:'AS-1001',name:'hba1c_may.pdf',cat:'Laboratory Report',date:'2026-05-14',status:'Verified',text:'Lab Report 2026-05-14\nHbA1c: 8.1 % (4.0-5.6)\nFasting Glucose: 162 mg/dL (70-100)'},
+{id:'d2',pid:'AS-1001',name:'prescription_sep.jpg',cat:'Prescription',date:'2026-09-20',status:'Verified',text:'Prescription 2026-09-20\nDiagnosis: Type 2 Diabetes\nTab Metformin 500 mg BD for 30 days'},
+{id:'d3',pid:'AS-1001',name:'hba1c_sep.pdf',cat:'Laboratory Report',date:'2026-09-20',status:'Not extracted',text:'Lab Report 2026-09-20\nHbA1c: 7.2 % (4.0-5.6)\nFasting Glucose: 131 mg/dL (70-100)'},
+{id:'d4',pid:'AS-1002',name:'bp_visit.png',cat:'Medical History',date:'2026-06-03',status:'Verified',text:'Diagnosis: Hypertension\nTab Amlodipine 5 mg OD for 90 days'},
+{id:'d5',pid:'AS-1002',name:'lipid_oct.pdf',cat:'Diagnostic Report',date:'2026-10-02',status:'Not extracted',text:'Lipid Profile 2026-10-02\nTotal Cholesterol: 224 mg/dL (0-200)\nLDL: 141 mg/dL (0-100)'},
+{id:'d6',pid:'AS-1003',name:'cbc_jul.pdf',cat:'Laboratory Report',date:'2026-07-20',status:'Verified',text:'CBC 2026-07-20\nHaemoglobin: 9.4 g/dL (12.0-15.5)'},
+{id:'d7',pid:'AS-1003',name:'rx_oct.jpg',cat:'Prescription',date:'2026-10-15',status:'Not extracted',text:'Prescription 2026-10-15\nTab Ferrous Sulfate 200 mg OD for 60 days'}];
+let R=[
+{id:'r1',pid:'AS-1001',doc:'d1',kind:'lab',a:'HbA1c',b:'8.1',c:'%',d:'4.0-5.6',date:'2026-05-14'},
+{id:'r2',pid:'AS-1001',doc:'d1',kind:'lab',a:'Fasting Glucose',b:'162',c:'mg/dL',d:'70-100',date:'2026-05-14'},
+{id:'r3',pid:'AS-1001',doc:'d2',kind:'med',a:'Metformin',b:'500 mg',c:'BD',d:'30 days',date:'2026-09-20'},
+{id:'r4',pid:'AS-1001',doc:'d2',kind:'cond',a:'Type 2 Diabetes',date:'2026-09-20'},
+{id:'r5',pid:'AS-1002',doc:'d4',kind:'med',a:'Amlodipine',b:'5 mg',c:'OD',d:'90 days',date:'2026-06-03'},
+{id:'r6',pid:'AS-1002',doc:'d4',kind:'cond',a:'Hypertension',date:'2026-06-03'},
+{id:'r7',pid:'AS-1003',doc:'d6',kind:'lab',a:'Haemoglobin',b:'9.4',c:'g/dL',d:'12.0-15.5',date:'2026-07-20'}];
+const files={};const CATS=['Prescription','Laboratory Report','Medical History','Diagnostic Report','Other'];
+const S={user:null,view:'dash',pid:null,q:'',fcat:'',show:false,ex:null,sum:{},modal:null,toast:'',theme:null};
+try{S.theme=localStorage.getItem('as-theme')}catch(e){}
+if(S.theme)document.documentElement.dataset.theme=S.theme;
+function toast(m){S.toast=m;render();setTimeout(()=>{S.toast='';render()},2600)}
+function theme(){const d=S.theme?S.theme==='dark':matchMedia('(prefers-color-scheme:dark)').matches;S.theme=d?'light':'dark';document.documentElement.dataset.theme=S.theme;try{localStorage.setItem('as-theme',S.theme)}catch(e){}render()}
+function go(v,pid){S.view=v;S.pid=pid||null;S.q='';render();scrollTo(0,0)}
+const pat=id=>P.find(p=>p.id===id);
+// ---- Parsing (rule-based; never invents values) ----
+function parse(text,date){const rows=[];(text||'').split('\n').forEach(l=>{l=l.trim();if(!l)return;let m;
+if(m=l.match(/^(?:tab|cap|syp|inj)\.?\s+([A-Za-z][A-Za-z0-9 ]*?)\s+(\d+(?:\.\d+)?\s?(?:mg|mcg|g|ml|iu))\b\s*[,\-]?\s*(OD|BD|TDS|QID|SOS|\d-\d-\d|once daily|twice daily)?\s*(?:for|x)?\s*(\d+\s*(?:days?|weeks?|months?))?/i)){const v=!m[3]||!m[4];rows.push({kind:'med',a:m[1],b:m[2],c:m[3]||'',d:m[4]||'',date,verify:v})}
+else if(m=l.match(/^(?:diagnosis|condition|history of|h\/o)\s*[:\-]\s*(.+)$/i))rows.push({kind:'cond',a:m[1],date,verify:false});
+else if(m=l.match(/^([A-Za-z][A-Za-z .()]{1,40}?)\s*:\s*(\d+(?:\.\d+)?)\s*([A-Za-z%\/µ^0-9.]*)\s*(?:\(\s*(?:ref\w*[: ]*)?([\d.]+\s*[-–]\s*[\d.]+)\s*\))?/)){rows.push({kind:'lab',a:m[1],b:m[2],c:m[3]||'',d:m[4]||'',date,verify:!m[3]||!m[4]})}});return rows}
+async function ocr(f){if(f.type==='application/pdf'){if(typeof pdfjsLib==='undefined')throw Error('PDF reader library could not load.');pdfjsLib.GlobalWorkerOptions.workerSrc='https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';const pdf=await pdfjsLib.getDocument({data:await f.arrayBuffer()}).promise;let t='';for(let i=1;i<=pdf.numPages;i++){const c=await(await pdf.getPage(i)).getTextContent();t+=c.items.map(x=>x.str).join(' ')+'\n'}if(t.trim().length<5)throw Error('This PDF has no embedded text (scanned). OCR is needed.');return t}
+if(typeof Tesseract==='undefined')throw Error('OCR engine could not load.');const r=await Promise.race([Tesseract.recognize(f,'eng'),new Promise((_,j)=>setTimeout(()=>j(Error('OCR timed out.')),25000))]);return r.data.text}
+async function startExtract(id){const d=D.find(x=>x.id===id);S.ex={doc:id,rows:[],note:'',busy:true,text:d.text||''};render();
+if(!d.text&&files[id]){try{d.text=await ocr(files[id]);S.ex.text=d.text;S.ex.note='ocr'}catch(e){S.ex.note='fail:'+e.message}}
+else if(!d.text)S.ex.note='fail:No file content available.';
+S.ex.rows=parse(S.ex.text,d.date);if(S.ex.note==='ocr')S.ex.rows.forEach(r=>r.verify=true);S.ex.busy=false;render()}
+function reparse(){const d=D.find(x=>x.id===S.ex.doc);d.text=S.ex.text;S.ex.rows=parse(S.ex.text,d.date);S.ex.note='manual';render()}
+function saveEx(){const e=S.ex,d=D.find(x=>x.id===e.doc);const rows=e.rows.filter(r=>r.a.trim());if(!rows.length){toast('Add at least one field before saving.');return}
+R=R.filter(r=>r.doc!==d.id);rows.forEach(r=>R.push({id:uid('r'),pid:d.pid,doc:d.id,kind:r.kind,a:r.a.trim(),b:r.b,c:r.c,d:r.d,date:r.date||d.date}));d.status='Verified';pat(d.pid).upd=today();delete S.sum[d.pid];S.ex=null;toast('Verified records saved to patient file.')}
+// ---- Summary (rule-based fallback from verified records only) ----
+function summarize(pid){const p=pat(pid),rs=R.filter(r=>r.pid===pid),src=r=>D.find(d=>d.id===r.doc)?.name||'?';
+const labs={};rs.filter(r=>r.kind==='lab').sort((x,y)=>x.date.localeCompare(y.date)).forEach(r=>(labs[r.a]=labs[r.a]||[]).push(r));
+const conds=[...new Set([...(p.conds?p.conds.split(',').map(s=>s.trim()):[]),...rs.filter(r=>r.kind==='cond').map(r=>r.a)])];
+const meds=rs.filter(r=>r.kind==='med');const miss=[];
+if(!p.allergies)miss.push('Allergy status not recorded.');if(!p.phone)miss.push('No contact number.');if(!rs.length)miss.push('No verified records yet.');
+D.filter(d=>d.pid===pid&&d.status!=='Verified').forEach(d=>miss.push(`Document "${d.name}" has not been extracted and verified, so it is excluded.`));
+rs.filter(r=>r.kind==='lab'&&!r.d).forEach(r=>miss.push(`No reference range for ${r.a} (${src(r)}).`));
+rs.filter(r=>r.kind==='med'&&(!r.c||!r.d)).forEach(r=>miss.push(`Incomplete dosing details for ${r.a} (${src(r)}).`));
+const ch=Object.entries(labs).filter(([k,v])=>v.length>1).map(([k,v])=>`${k}: ${v.map(x=>x.b+' '+x.c+' ('+x.date+')').join(' → ')}`);
+return{at:new Date().toLocaleString(),ov:`${p.name}, ${p.age}-year-old ${p.gender.toLowerCase()}, ID ${p.id}. Allergies: ${p.allergies||'not recorded'}. Blood group: ${p.blood||'not recorded'}.`,conds:conds.map(c=>c+(rs.find(r=>r.kind==='cond'&&r.a===c)?` [source: ${src(rs.find(r=>r.kind==='cond'&&r.a===c))}]`:' [source: patient profile]')),
+meds:meds.map(r=>`${r.a} ${r.b} ${r.c} ${r.d} [source: ${src(r)}, ${r.date}]`),labs:Object.entries(labs).map(([k,v])=>{const l=v[v.length-1];return`${k}: ${l.b} ${l.c}${l.d?' (ref '+l.d+')':''} [source: ${src(l)}, ${l.date}]`}),ch,miss}}
+// ---- Actions ----
+function login(demo){const e=demo?'doctor@arogya.demo':$v('em'),pw=demo?'demo123':$v('pw');if(e==='doctor@arogya.demo'&&pw==='demo123'){S.user={name:'Dr. Demo',role:'doctor'};S.view='dash';render()}else{S.err='Invalid credentials. Use the demo login button.';render()}}
+const $v=id=>document.getElementById(id)?.value.trim()||'';
+function savePatient(old){const f={name:$v('f_name'),age:+$v('f_age'),gender:$v('f_gender'),phone:$v('f_phone'),blood:$v('f_blood'),allergies:$v('f_all'),conds:$v('f_con')};const er={};
+if(f.name.length<2)er.name='Enter the full name.';if(!(f.age>=0&&f.age<=120)||!$v('f_age'))er.age='Enter an age from 0 to 120.';if(!f.gender)er.gender='Select a gender.';if(f.phone&&!/^\d{10}$/.test(f.phone))er.phone='Phone must be 10 digits.';
+if(Object.keys(er).length){S.modal={old,f,er};render();return}
+if(old){Object.assign(pat(old),f,{upd:today()});toast('Patient updated.')}else{let n=1000+P.length+1;while(pat('AS-'+n))n++;P.push({id:'AS-'+n,...f,reg:today(),upd:today()});toast('Patient added.')}S.modal=null;render()}
+function delPatient(id){if(!confirm('Delete this patient and all their documents and records? This cannot be undone.'))return;P=P.filter(p=>p.id!==id);D.filter(d=>d.pid===id).forEach(d=>delete files[d.id]);D=D.filter(d=>d.pid!==id);R=R.filter(r=>r.pid!==id);go('patients');toast('Patient deleted.')}
+function delDoc(id){if(!confirm('Delete this document and records extracted from it?'))return;const d=D.find(x=>x.id===id);delete files[id];D=D.filter(x=>x.id!==id);R=R.filter(r=>r.doc!==id);delete S.sum[d.pid];render();toast('Document deleted.')}
+function addFile(f){S.up=S.up||{};const ok=['application/pdf','image/jpeg','image/png'];if(!ok.includes(f.type)){S.up.err='Unsupported file. Use PDF, JPG, JPEG or PNG.';S.up.file=null}else if(f.size>10*1024*1024){S.up.err='File is larger than 10 MB.';S.up.file=null}else{S.up.err='';S.up.file=f}render()}
+function doUpload(){const u=S.up||{};const pid=$v('u_pat'),cat=$v('u_cat');if(!pid){u.err='Select a patient first.';render();return}if(!u.file){u.err='Choose a file to upload.';render();return}
+const id=uid('d');files[id]=u.file;D.push({id,pid,name:u.file.name,cat,date:today(),status:'Not extracted',text:'',type:u.file.type});pat(pid).upd=today();S.up={};go('patient',pid);toast('Document uploaded. Click Extract to read it.')}
+function viewDoc(id){S.modal={doc:id};render()}
+function genSum(pid){S.sum[pid]=summarize(pid);render()}
+// ---- Views ----
+const badge=s=>`<span class="tag ${s==='Verified'?'v':'w'}">${esc(s)}</span>`;
+function shell(body){const t=document.documentElement.dataset.theme==='dark'||(!S.theme&&matchMedia('(prefers-color-scheme:dark)').matches);const n=(v,l)=>`<button class="nav ${S.view===v||(v==='patients'&&S.view==='patient')?'on':''}" onclick="go('${v}')">${l}</button>`;
+return`<div class="app"><nav class="side"><div class="logo">Arogya-Setu</div>${n('dash','Dashboard')}${n('patients','Patients')}${n('upload','Upload document')}</nav><main class="main"><div class="top"><span class="tag w">Hackathon prototype · demo data · not a clinical system</span><div class="row"><button class="b s sm" onclick="theme()" aria-label="Toggle dark mode">${t?'☀ Light':'☾ Dark'}</button><span class="mu">${esc(S.user.name)}</span><button class="b s sm" onclick="S.user=null;S.view='dash';render()">Log out</button></div></div>${body}</main></div>`}
+function vLogin(){return`<div class="login"><div class="logo" style="font-size:2rem">Arogya-Setu</div><p class="mu">Connecting Health Records. Empowering Better Care.</p><div class="card"><div class="warn">Hackathon prototype. Demo sign-in only, not production security. Use doctor@arogya.demo / demo123.</div><label for="em">Email</label><input id="em" type="email" value="doctor@arogya.demo"><label for="pw">Password</label><div class="row" style="flex-wrap:nowrap"><input id="pw" type="${S.show?'text':'password'}" value="demo123"><button class="b s sm" onclick="S.show=!S.show;render()">${S.show?'Hide':'Show'}</button></div>${S.err?`<p class="err">${S.err}</p>`:''}<p><button class="b" onclick="login()">Log in</button> <button class="b s" onclick="login(true)">Demo login</button></p></div></div>`}
+function vDash(){const rec=[...P].sort((a,b)=>b.upd.localeCompare(a.upd)).slice(0,5);const act=[...D].sort((a,b)=>b.date.localeCompare(a.date)).slice(0,5);
+return`<h1>Good morning, Doctor!</h1><p class="mu">One place for scattered records: upload, extract, verify, summarise.</p><div class="grid"><div class="card"><div class="stat">${P.length}</div>Registered patients</div><div class="card"><div class="stat">${D.length}</div>Uploaded documents</div><div class="card"><div class="stat">${D.filter(d=>d.status==='Verified').length}</div>Verified documents</div></div>
+<div class="row" style="margin-bottom:1rem"><button class="b" onclick="S.modal={f:{},er:{}};render()">Add new patient</button><button class="b" onclick="go('upload')">Upload medical document</button><button class="b s" onclick="go('patients')">View patients</button></div>
+<div class="grid"><div class="card"><h2>Recently updated records</h2>${rec.length?rec.map(p=>`<p><a href="#" onclick="go('patient','${p.id}');return false">${esc(p.name)}</a> <span class="mu">${p.id} · ${p.upd}</span></p>`).join(''):'<p class="mu">No patients yet.</p>'}</div>
+<div class="card"><h2>Recent activity</h2>${act.length?act.map(d=>`<p>${esc(d.cat)} uploaded for ${esc(pat(d.pid)?.name)} <span class="mu">${d.date}</span> ${badge(d.status)}</p>`).join(''):'<p class="mu">No documents yet.</p>'}</div></div>`}
+function vPatients(){const q=S.q.toLowerCase();const l=P.filter(p=>p.name.toLowerCase().includes(q)||p.id.toLowerCase().includes(q)).sort((a,b)=>b.upd.localeCompare(a.upd));
+return`<div class="row sp"><h1>Patients</h1><button class="b" onclick="S.modal={f:{},er:{}};render()">Add new patient</button></div><input id="q" placeholder="Search by name or patient ID" value="${esc(S.q)}" oninput="S.q=this.value;render();const e=document.getElementById('q');e.focus();e.setSelectionRange(99,99)" style="margin:.5rem 0 1rem"><div class="card ov">${l.length?`<table><tr><th>ID</th><th>Name</th><th>Age / Gender</th><th>Updated</th><th></th></tr>${l.map(p=>`<tr><td>${p.id}</td><td>${esc(p.name)}</td><td>${p.age} / ${p.gender}</td><td>${p.upd}</td><td><button class="b sm" onclick="go('patient','${p.id}')">Open</button></td></tr>`).join('')}</table>`:`<p class="mu">No patients match "${esc(S.q)}". Try a different name or ID, or add a new patient.</p>`}</div>`}
+function vPatient(){const p=pat(S.pid);if(!p)return'<p>Patient not found.</p>';const ds=D.filter(d=>d.pid===p.id&&(!S.fcat||d.cat===S.fcat)).sort((a,b)=>b.date.localeCompare(a.date));const s=S.sum[p.id];
+const tl=D.filter(d=>d.pid===p.id).sort((a,b)=>a.date.localeCompare(b.date));
+return`<div class="row sp"><h1>${esc(p.name)}</h1><div class="row"><button class="b s sm" onclick="S.modal={old:'${p.id}',f:{name:'${esc(p.name).replace(/'/g,'')}'},er:{},load:1};render()">Edit</button><button class="b d sm" onclick="delPatient('${p.id}')">Delete</button></div></div>
+<div class="card"><div class="grid"><div><span class="mu">Patient ID</span><br>${p.id}</div><div><span class="mu">Age / Gender</span><br>${p.age} / ${p.gender}</div><div><span class="mu">Blood group</span><br>${esc(p.blood||'Not recorded')}</div><div><span class="mu">Allergies</span><br>${esc(p.allergies||'Not recorded')}</div><div><span class="mu">Conditions</span><br>${esc(p.conds||'Not recorded')}</div><div><span class="mu">Registered</span><br>${p.reg}</div></div></div>
+<div class="card"><div class="row sp"><h2>AI medical summary</h2><button class="b" onclick="genSum('${p.id}')">${s?'Regenerate summary':'Generate AI Summary'}</button></div>${s?sumHtml(s):'<p class="mu">Uses only verified records for this patient.</p>'}</div>
+<div class="card"><div class="row sp"><h2>Documents</h2><div class="row"><select onchange="S.fcat=this.value;render()" style="width:auto"><option value="">All types</option>${CATS.map(c=>`<option ${S.fcat===c?'selected':''}>${c}</option>`).join('')}</select><button class="b sm" onclick="S.up={pid:'${p.id}'};go('upload')">Upload</button></div></div>
+${ds.length?`<div class="ov"><table><tr><th>File</th><th>Type</th><th>Date</th><th>Status</th><th></th></tr>${ds.map(d=>`<tr><td>${esc(d.name)}</td><td>${d.cat}</td><td>${d.date}</td><td>${badge(d.status)}</td><td class="row"><button class="b sm" onclick="startExtract('${d.id}')">${d.status==='Verified'?'Review':'Extract'}</button><button class="b s sm" onclick="viewDoc('${d.id}')">View</button>${files[d.id]?`<a class="b s sm" download="${esc(d.name)}" href="${URL.createObjectURL(files[d.id])}">Download</a>`:''}<button class="b d sm" onclick="delDoc('${d.id}')">Delete</button></td></tr>`).join('')}</table></div>`:'<p class="mu">No documents found. Upload one to get started.</p>'}</div>
+<div class="card"><h2>History timeline</h2>${tl.length?`<div class="tl">${tl.map(d=>`<div><b>${d.date}</b> · ${d.cat} uploaded <span class="mu">(${esc(d.name)})</span> ${badge(d.status)}</div>`).join('')}</div>`:'<p class="mu">Nothing on the timeline yet.</p>'}</div>`}
+const ul=a=>a.length?`<ul>${a.map(x=>`<li>${esc(x)}</li>`).join('')}</ul>`:'<p class="mu">None recorded.</p>';
+function sumHtml(s){return`<div class="warn">Rule-based summary built from this patient's verified records on ${esc(s.at)}. No external AI model was called. Must be reviewed by a qualified healthcare professional. It does not diagnose or recommend treatment.</div><div class="sum"><h3>1. Patient overview</h3><p>${esc(s.ov)}</p><h3>2. Documented conditions</h3>${ul(s.conds)}<h3>3. Recorded medications</h3>${ul(s.meds)}<h3>4. Laboratory observations</h3>${ul(s.labs)}<h3>5. Changes across reports</h3>${ul(s.ch)}<h3>6. Missing or incomplete</h3>${ul(s.miss)}</div>`}
+function vUpload(){const u=S.up||{};return`<h1>Upload medical document</h1><div class="card"><div class="f2"><div><label for="u_pat">Patient</label><select id="u_pat"><option value="">Select patient</option>${P.map(p=>`<option value="${p.id}" ${u.pid===p.id?'selected':''}>${esc(p.name)} (${p.id})</option>`).join('')}</select></div><div><label for="u_cat">Category</label><select id="u_cat">${CATS.map(c=>`<option>${c}</option>`).join('')}</select></div></div>
+<label>File (PDF, JPG, PNG, max 10 MB)</label><div class="drop" id="dz" onclick="document.getElementById('fi').click()" ondragover="event.preventDefault();this.classList.add('h')" ondragleave="this.classList.remove('h')" ondrop="event.preventDefault();addFile(event.dataTransfer.files[0])">${u.file?`<b>${esc(u.file.name)}</b> · ${(u.file.size/1024).toFixed(0)} KB`:'Drag a file here or click to browse'}</div><input id="fi" type="file" accept=".pdf,.jpg,.jpeg,.png" hidden onchange="addFile(this.files[0])">
+${u.file&&u.file.type.startsWith('image')?`<img alt="Preview" src="${URL.createObjectURL(u.file)}" style="max-width:100%;max-height:260px;margin-top:.6rem;border-radius:8px">`:''}${u.err?`<p class="err">${u.err}</p>`:''}<p class="mu">Files are kept in this browser session only and are not uploaded to a server.</p><button class="b" onclick="doUpload()">Upload document</button></div>`}
+function exModal(){const e=S.ex,d=D.find(x=>x.id===e.doc);const fail=e.note.startsWith('fail:');const L={lab:['Test','Value','Unit','Reference'],med:['Medicine','Dose','Frequency','Duration'],cond:['Condition','','','']};
+return`<div class="modal"><div><h2>Extract and verify: ${esc(d.name)}</h2>${e.busy?'<p>Reading document…</p>':`
+${fail?`<div class="warn">Automatic reading failed: ${esc(e.note.slice(5))} Nothing was assumed. Type or paste the document text below, or add fields manually.</div>`:''}${e.note==='ocr'?'<div class="warn">Text came from OCR. Every field is marked for verification. Check them against the original.</div>':''}
+<label>Document text (editable)</label><textarea rows="5" oninput="S.ex.text=this.value">${esc(e.text)}</textarea><p><button class="b s sm" onclick="reparse()">Re-read fields from text</button> <button class="b s sm" onclick="S.ex.rows.push({kind:'lab',a:'',b:'',c:'',d:'',date:'${d.date}',verify:true});render()">+ Lab</button> <button class="b s sm" onclick="S.ex.rows.push({kind:'med',a:'',b:'',c:'',d:'',date:'${d.date}',verify:true});render()">+ Medicine</button> <button class="b s sm" onclick="S.ex.rows.push({kind:'cond',a:'',date:'${d.date}',verify:true});render()">+ Condition</button></p>
+${e.rows.length?e.rows.map((r,i)=>`<div class="card" style="padding:.6rem"><div class="row sp"><b>${r.kind==='lab'?'Lab result':r.kind==='med'?'Medicine':'Condition'}</b>${r.verify?'<span class="tag w">Needs verification</span>':'<span class="tag">Extracted</span>'}<button class="b d sm" onclick="S.ex.rows.splice(${i},1);render()">Remove</button></div><div class="f2">${['a','b','c','d'].map((k,j)=>L[r.kind][j]?`<div><label>${L[r.kind][j]}</label><input value="${esc(r[k])}" oninput="S.ex.rows[${i}].${k}=this.value"></div>`:'').join('')}</div></div>`).join(''):'<p class="mu">No fields found yet.</p>'}
+<div class="row"><button class="b" onclick="saveEx()">Save as doctor-verified</button><button class="b s" onclick="S.ex=null;render()">Cancel</button></div>`}</div></div>`}
+function modal(){const m=S.modal;if(m.doc){const d=D.find(x=>x.id===m.doc),f=files[d.id];return`<div class="modal"><div><h2>${esc(d.name)}</h2>${f?(f.type==='application/pdf'?`<iframe title="PDF" src="${URL.createObjectURL(f)}" style="width:100%;height:60vh;border:0"></iframe>`:`<img alt="Document" src="${URL.createObjectURL(f)}" style="max-width:100%">`):`<pre style="white-space:pre-wrap">${esc(d.text)}</pre><p class="mu">Demo document: text shown instead of a scan.</p>`}<p><button class="b" onclick="S.modal=null;render()">Close</button></p></div></div>`}
+const p=m.old&&!m.load?m.f:m.old?{...pat(m.old)}:m.f,e=m.er||{};const er=k=>e[k]?`<div class="err">${e[k]}</div>`:'';
+return`<div class="modal"><div><h2>${m.old?'Edit patient':'Add new patient'}</h2><div class="f2"><div><label for="f_name">Full name</label><input id="f_name" value="${esc(p.name)}">${er('name')}</div><div><label for="f_age">Age</label><input id="f_age" type="number" value="${esc(p.age)}">${er('age')}</div>
+<div><label for="f_gender">Gender</label><select id="f_gender"><option value="">Select</option>${['Female','Male','Other'].map(g=>`<option ${p.gender===g?'selected':''}>${g}</option>`).join('')}</select>${er('gender')}</div><div><label for="f_phone">Phone (optional)</label><input id="f_phone" value="${esc(p.phone)}">${er('phone')}</div>
+<div><label for="f_blood">Blood group (optional)</label><input id="f_blood" value="${esc(p.blood)}"></div><div><label for="f_all">Known allergies (optional)</label><input id="f_all" value="${esc(p.allergies)}"></div></div><label for="f_con">Existing conditions (optional)</label><input id="f_con" value="${esc(p.conds)}"><p class="mu">Patient ID is generated automatically.</p><div class="row"><button class="b" onclick="savePatient(${m.old?`'${m.old}'`:'null'})">Save patient</button><button class="b s" onclick="S.modal=null;render()">Cancel</button></div></div></div>`}
+function render(){const a=document.activeElement;if(a&&a.id==='q')return renderMain();renderMain()}
+function renderMain(){const r=document.getElementById('root');if(!S.user){r.innerHTML=vLogin();return}
+const v={dash:vDash,patients:vPatients,patient:vPatient,upload:vUpload}[S.view]();r.innerHTML=shell(v)+(S.ex?exModal():'')+(S.modal?modal():'')+(S.toast?`<div class="toast" role="status">${esc(S.toast)}</div>`:'');
+const q=document.getElementById('q');if(q&&S.q){q.focus();q.setSelectionRange(q.value.length,q.value.length)}}
+render();
+</script></body></html>
